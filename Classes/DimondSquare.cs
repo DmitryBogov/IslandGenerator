@@ -7,7 +7,7 @@
 namespace Terrain
 {
     /// <summary>
-    /// Интерфейс для абстракции над генераторами чесел
+    /// Интерфейс для абстракции над генераторами чисел
     /// </summary>
     public interface INoiseGenerator
     {
@@ -27,16 +27,17 @@ namespace Terrain
         private double _roughness;
         private double noiseR;
         // private double _seed; // an initial seed value for the corners of the data
+
         private INoiseGenerator Generator;
 
-        // roughness min/max value of results calculating point
+        // 
         /// <summary>
-        /// 
+   
         /// </summary>
         /// <param name="generator"></param>
-        /// <param name="terrainPoints"> must be power of 2</param>
-        /// <param name="roughness">roughness </param>
-        /// <param name="noiseRoughness">noise roughness</param>
+        /// <param name="terrainPoints">Размер карты. Должен быть = 2^n</param>
+        /// <param name="roughness">Шероховатость результата</param>
+        /// <param name="noiseRoughness">Шаг генератора чисел</param>
         public DiamondSquare(INoiseGenerator generator, int terrainPoints, double roughness, double noiseRoughness)
         {
             this._terrainPoints = terrainPoints;
@@ -60,7 +61,7 @@ namespace Terrain
 
             double[,] data = new double[DATA_SIZE, DATA_SIZE];
             data[0, 0] = data[0, DATA_SIZE - 1] = data[DATA_SIZE - 1, 0] =
-              data[DATA_SIZE - 1, DATA_SIZE - 1] = 0;
+              data[DATA_SIZE - 1, DATA_SIZE - 1] = 0; // 
 
             double h = _roughness;//the range (-h -> +h) for the average offset - affects roughness
 
@@ -101,8 +102,7 @@ namespace Terrain
 
                             
                         // avg + (r.NextDouble() * 2 * h) - h;         modified to  
-                        // 0.1 - 0.2 - 0.2h - -1h.1h
-                        // -1.1 - 0.2 - 0.2h
+  
                         avg + (Generator.Evaluate(x* noiseR, y* noiseR) * h);  
 
                     }
@@ -136,7 +136,7 @@ namespace Terrain
                         //and then subtract h so the end value is
                         //in the range (-h, +h)
 
-                        // avg  = avg + Generator.Evaluate(x, y) * h;  modified to 
+                        // avg  = avg + (r.NextDouble() * 2 * h) - h;  modified to 
                         avg = avg + (Generator.Evaluate(x* noiseR, y* noiseR)  * h);
 
                         //update value for center of diamond
